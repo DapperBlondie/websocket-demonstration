@@ -6,12 +6,19 @@ import (
 	"github.com/rs/zerolog/log"
 	"golang.org/x/net/websocket"
 	"net/http"
+	"os"
 	"strconv"
 )
 
 func main() {
 	http.Handle("/", websocket.Handler(Echo))
-	return
+
+	err := http.ListenAndServe("localhost:12345", nil)
+	if err != nil {
+		log.Log().Msg("Exited ...")
+		os.Exit(1)
+		return
+	}
 }
 
 func Echo(ws *websocket.Conn) {
